@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Reward</title>
+  <style>
+    body, html { margin:0; padding:0; font-family: sans-serif; background:#f0f0f0; }
+    .hamburger {
+      position: absolute; top: 15px; left: 15px; z-index: 20; cursor:pointer;
+    }
+    .hamburger div { width:30px; height:4px; background:black; margin:6px 0; border-radius:2px; }
+    .menu {
+      position:absolute; top:0; left:-200px; width:200px; height:100%; background:rgba(0,0,0,0.85);
+      padding-top:60px; transition:left 0.3s; z-index:19;
+    }
+    .menu a { display:block; color:white; padding:12px; text-decoration:none; font-size:18px; }
+    .menu a:hover { background: rgba(255,255,255,0.2); }
+    .menu.show { left:0; }
+
+    #tasks { padding: 60px 20px 20px 20px; }
+    .task { font-size:20px; margin-bottom:15px; }
+    button { padding:10px 20px; font-size:16px; margin-top:20px; cursor:pointer; }
+  </style>
+</head>
+<body>
+
+<!-- Hamburger Menu -->
+<div class="hamburger" onclick="toggleMenu()">
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+
+<div class="menu" id="menu">
+  <a href="index.html">Home</a>
+  <a href="AR.html">AR</a>
+  <a href="reward.html" style="background: rgba(255,255,255,0.2)">Reward</a>
+</div>
+
+<div id="tasks">
+  <div class="task" id="task1">1. 掃三個 Check Point</div>
+  <div class="task" id="task2">2. 留一次言</div>
+
+  <button onclick="clearAll()">清除所有紀錄 (開發用)</button>
+</div>
+
+<script>
+function toggleMenu() {
+  document.getElementById("menu").classList.toggle("show");
+}
+
+// 更新任務狀態
+function updateTasks() {
+  const task1 = document.getElementById("task1");
+  const task2 = document.getElementById("task2");
+
+  // 檢查 checkpoint 是否完成
+  const checkpointsDone =
+    localStorage.getItem("checkpoint-0") === "done" &&
+    localStorage.getItem("checkpoint-1") === "done" &&
+    localStorage.getItem("checkpoint-2") === "done";
+
+  if (checkpointsDone) {
+    task1.textContent = "1. 掃三個 Check Point - OK!";
+  } else {
+    task1.textContent = "1. 掃三個 Check Point";
+  }
+
+  // 檢查留言是否完成
+  const commentDone = localStorage.getItem("commentDone") === "true";
+  if (commentDone) {
+    task2.textContent = "2. 留一次言 - OK!";
+  } else {
+    task2.textContent = "2. 留一次言";
+  }
+}
+
+// 清除所有紀錄
+function clearAll() {
+  localStorage.clear();
+  updateTasks();
+  alert("所有紀錄已清除");
+}
+
+// 每 0.5 秒檢查一次 localStorage
+setInterval(updateTasks, 500);
+updateTasks();
+</script>
+
+</body>
+</html>
